@@ -23,7 +23,7 @@ export default function Register() {
           <div className={"col-lg-6 " + styles.left}>
             <div className={styles.heading}>
               <div className={styles.logo}>
-                <Image src={logo} />
+                <Image src={logo} alt="e-schoolcampus" />
               </div>
               <h2 className={styles.title}>
                 Welcome to

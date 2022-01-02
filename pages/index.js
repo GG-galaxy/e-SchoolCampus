@@ -77,7 +77,7 @@ export default function Home() {
           <div className={"col-lg-6 " + styles.left}>
             <div className={styles.heading}>
               <div className={styles.logo}>
-                <Image src={logo} />
+                <Image src={logo} alt="e-schoolcampus" />
               </div>
               <h2 className={styles.title}>
                 Welcome to
@@ -87,8 +87,8 @@ export default function Home() {
             </div>
 
             <p className={styles.description}>
-              In today's time every school around the world needs one or other
-              kind of School Management Sytem or which is called as School
+              In today&apos;s time every school around the world needs one or
+              other kind of School Management Sytem or which is called as School
               Management. Most of the schools have experienced one or other kind
               of system, however due to limitations of features, product
               experience or customer support problems they end up looking for
@@ -132,8 +132,7 @@ export default function Home() {
                       type="password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className={styles.passwordTextField}
-                      className="form-control"
+                      className={styles.passwordTextField + " form-control"}
                       id="Password"
                       placeholder="Password"
                       required
@@ -186,8 +185,7 @@ export default function Home() {
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className={styles.passwordTextField}
-                        className="form-control"
+                        className={"form-control " + styles.passwordTextField}
                         id="Password"
                         placeholder="Password"
                       />
@@ -243,7 +241,7 @@ export default function Home() {
                   <small>
                     <a href="#">Forgot Password?</a>
                   </small>
-                  <p>-- Don't have an account? --</p>
+                  <p>-- Don&apos;t have an account? --</p>
                   <button
                     type="button"
                     className={"btn btn-outline-info " + styles.signupBtn}

@@ -32,8 +32,7 @@ export default function StudentRegister(){
                       type="txt"
                       value={address}
                       onChange={(e) => setAddress(e.target.value)}
-                      className={styles.passwordTextField}
-                      className="form-control"
+                      className={"form-control " + styles.passwordTextField}
                       id="Address"
                       placeholder="Address"
                       required
@@ -45,8 +44,7 @@ export default function StudentRegister(){
                       type="tel"
                       value={contact}
                       onChange={(e) => setContact(e.target.value)}
-                      className={styles.passwordTextField}
-                      className="form-control"
+                      className="form-control "
                       id="Contact"
                       placeholder="Contact"
                       required
