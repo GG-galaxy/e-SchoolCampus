@@ -28,7 +28,6 @@ export default function StudentRegister({ user, close }) {
   }, []);
 
   async function registerHandler(e) {
-    e.preventDefault();
 
     if (rollNo < 1 || rollNo.length > 20) {
       alert("Invalid Roll No.");
@@ -44,7 +43,9 @@ export default function StudentRegister({ user, close }) {
     )
       return;
 
-    const data = {
+      e.preventDefault();
+    
+      const data = {
       name,
       address,
       contact,

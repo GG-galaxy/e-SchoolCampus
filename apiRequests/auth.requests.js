@@ -3,7 +3,11 @@ import axios from "axios";
 
 export async function getUser(uid) {
   try {
-    const response = await axios.get(`${apiBaseUrl}/auth/${uid}`);
+    const response = await axios({
+      baseURL: apiBaseUrl,
+      method: "GET",
+      url: `/auth/${uid}`,
+    });
     if (response?.data?.success) {
       return response.data.data;
     } else return null;
@@ -67,7 +71,7 @@ export async function addAdmin(data) {
   try {
     const response = await axios({
       baseURL: apiBaseUrl,
-       method: "POST",
+      method: "POST",
       url: "/admin",
       data: data,
     });

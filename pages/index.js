@@ -4,7 +4,6 @@ import styles from "../styles/Home.module.css";
 import logo from "../public/images/logo.png";
 import { useState } from "react";
 import { useCookies } from "react-cookie";
-import "../firebase/config";
 import { signUpWithEmail, loginInWithEmail } from "../firebase/auth";
 import { useRouter } from "next/router";
 import { getUser } from "../apiRequests/auth.requests";
@@ -12,7 +11,7 @@ import extractCookieData from "../utils/cookie";
 
 export default function Home() {
   const router = useRouter();
-  const [cookie, setCookie] = useCookies([]);
+  const [, setCookie] = useCookies([]);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [openSigupForm, setOpenSignupForm] = useState(false);
@@ -51,7 +50,7 @@ export default function Home() {
       setEmail("");
       setPassword("");
 
-      router.push("/register");
+      router.push("/dashboard");
     }
   }
 
