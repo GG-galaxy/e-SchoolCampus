@@ -1,3 +1,14 @@
+## Importnat Note :
+
+Ensure to add a .env.local file to run the application with these values
+
+```bash
+NEXT_PUBLIC_ENV = PRODUCTION
+NEXT_PUBLIC_LOCAL_API_BASE_URL = http://localhost:8080
+NEXT_PUBLIC_PRODUCTION_API_BASE_URL = https://e-schoolcampus-api.herokuapp.com/
+```
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
