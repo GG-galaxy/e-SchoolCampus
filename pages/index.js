@@ -7,21 +7,16 @@ import { useCookies } from "react-cookie";
 import "../firebase/config";
 import { signUpWithEmail, loginInWithEmail } from "../firebase/auth";
 import { useRouter } from "next/router";
+import { getUser } from "../apiRequests/auth.requests";
+import extractCookieData from "../utils/cookie";
 
 export default function Home() {
   const router = useRouter();
   const [cookie, setCookie] = useCookies([]);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loginType, setLoginType] = useState(null);
-  const [openLoginForm, setOpenLoginForm] = useState(false);
   const [openSigupForm, setOpenSignupForm] = useState(false);
   const [message, setMessage] = useState({});
-
-  function onClickHandler(type) {
-    setLoginType(type);
-    setOpenLoginForm(true);
-  }
 
   function openSigup() {
     setOpenSignupForm(true);
@@ -38,12 +33,10 @@ export default function Home() {
         textColor: "text-success",
       };
 
-      const user = { uid: res.data.uid, email: res.data.email };
-      console.log("UserData => ", user);
-
-      setMessage(msg);
       setEmail("");
       setPassword("");
+      setMessage(msg);
+      setOpenSignupForm(false);
     }
   }
 
@@ -51,14 +44,12 @@ export default function Home() {
     e.preventDefault();
     const res = await loginInWithEmail(email, password);
     if (res && res?.data) {
-      const user = { uid: res.data.uid, userType: loginType };
-      console.log("UserData => ", user);
+      const user = { uid: res.data.uid, email: res.data.email };
 
       setCookie("eSchoolUser", user, { secure: true });
 
       setEmail("");
       setPassword("");
-      setLoginType("");
 
       router.push("/register");
     }
@@ -108,11 +99,7 @@ export default function Home() {
                 <h4 className={styles.rightInnerHeading}>
                   Login to e-SchoolCampus
                 </h4>
-                <div className={styles.messageBox}>
-                  <p className={message.textColor + " text-center"}>
-                    {message.data}
-                  </p>
-                </div>
+
                 <form>
                   <div className="form-group">
                     <label htmlFor="email">Email address</label>
@@ -166,76 +153,45 @@ export default function Home() {
                 <h4 className={styles.rightInnerHeading}>
                   Login to e-SchoolCampus
                 </h4>
-                {openLoginForm ? (
-                  <form>
-                    <div className="form-group">
-                      <label htmlFor="email">Email address</label>
-                      <input
-                        type="email"
-                        id="email"
-                        placeholder="Enter email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className={"form-control " + styles.emailTextField}
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label htmlFor="Password">Password</label>
-                      <input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className={"form-control " + styles.passwordTextField}
-                        id="Password"
-                        placeholder="Password"
-                      />
-                    </div>
-                    <div className={styles.loginFormBtns}>
-                      <button
-                        type="submit"
-                        className={"btn btn-outline-success " + styles.loginBtn}
-                        onClick={logIn}
-                      >
-                        Login
-                      </button>
-                      <button
-                        type="button"
-                        className={"btn btn-outline-danger "}
-                        onClick={() => setOpenLoginForm(false)}
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </form>
-                ) : (
-                  <div className={styles.loginOptions}>
-                    <p>-- Login as --</p>
-                    <div
-                      className="bg-success"
-                      onClick={() => onClickHandler("student")}
-                    >
-                      <h6>Student</h6>
-                    </div>
-                    <div
-                      className="bg-info"
-                      onClick={() => onClickHandler("teacher")}
-                    >
-                      <h6>Teacher</h6>
-                    </div>
-                    <div
-                      className="bg-warning"
-                      onClick={() => onClickHandler("parent")}
-                    >
-                      <h6>Parent</h6>
-                    </div>
-                    <div
-                      className="bg-danger"
-                      onClick={() => onClickHandler("admin")}
-                    >
-                      <h6>Admin</h6>
-                    </div>
+
+                <div className={styles.messageBox}>
+                  <p className={message.textColor + " text-center"}>
+                    {message.data}
+                  </p>
+                </div>
+
+                <form>
+                  <div className="form-group">
+                    <label htmlFor="email">Email address</label>
+                    <input
+                      type="email"
+                      id="email"
+                      placeholder="Enter email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className={"form-control " + styles.emailTextField}
+                    />
                   </div>
-                )}
+                  <div className="form-group">
+                    <label htmlFor="Password">Password</label>
+                    <input
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className={"form-control " + styles.passwordTextField}
+                      id="Password"
+                      placeholder="Password"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    className={"btn btn-outline-success " + styles.loginBtn}
+                    onClick={logIn}
+                  >
+                    Login
+                  </button>
+                </form>
 
                 <div className={styles.rightInnerBottom}>
                   <small>
@@ -257,4 +213,27 @@ export default function Home() {
       </main>
     </div>
   );
+}
+
+export async function getServerSideProps(context) {
+  const { req } = context;
+
+  const user = extractCookieData(req.headers.cookie);
+  const uid = user?.uid;
+
+  // checking if any user with the uid exists in the DB
+  const res = await getUser(uid);
+
+  if (res) {
+    return {
+      redirect: {
+        destination: "/dashboard",
+        permanent: false,
+      },
+    };
+  } else {
+    return {
+      props: {},
+    };
+  }
 }

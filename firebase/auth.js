@@ -3,6 +3,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   sendEmailVerification,
+  signOut,
 } from "firebase/auth";
 
 const auth = getAuth();
@@ -49,7 +50,7 @@ export const loginInWithEmail = async (email, password) => {
   try {
     //Built in firebase function responsible for authentication
     const res = await signInWithEmailAndPassword(auth, email, password);
-    console.log("Login result => ", res);
+
     if (res.user.emailVerified) {
       return { data: res.user };
     } else {
@@ -65,3 +66,16 @@ export const loginInWithEmail = async (email, password) => {
     return { data: null };
   }
 };
+
+export async function logout() {
+  try {
+    await signOut(auth);
+    // Sign-out successful
+    return true;
+  } catch (err) {
+    // An error happened
+    console.log(err);
+    alert(err.message);
+    return false;
+  }
+}
